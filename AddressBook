@@ -4,30 +4,30 @@ pragma solidity ^0.8.8;
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract AddressBook is Ownable(msg.sender) {
-    // Define a private salt value for internal use
+    // Define a privado salt valor para uso interno
     string private salt = "value"; 
 
-    // Define a struct to represent a contact
+    // Define a estrutura para representar o contato
     struct Contact {
         uint id; // Unique identifier for the contact
-        string firstName; // First name of the contact
-        string lastName; // Last name of the contact
-        uint[] phoneNumbers; // Array to store multiple phone numbers for the contact
+        string firstName; // Primeiro nome do contato
+        string lastName; // Ultimo nome do contato
+        uint[] phoneNumbers; // Array para gravar multiplos numeros de contatos
     }
 
     // Array to store all contacts
     Contact[] private contacts;
 
-    // Mapping to store the index of each contact in the contacts array using its ID
+    // Mapping para gravar index de cada contato na lista array usando ID
     mapping(uint => uint) private idToIndex;
 
     // Variable to keep track of the ID for the next contact
     uint private nextId = 1;
 
-    // Custom error for when a contact is not found
+    // Customiza erro para quando o contato nao encontrado
     error ContactNotFound(uint id);
 
-    // Function to add a new contact
+    // Funcao para adicionar novo contato
     function addContact(string calldata firstName, string calldata lastName, uint[] calldata phoneNumbers) external onlyOwner {
         // Create a new contact with the provided details and add it to the contacts array
         contacts.push(Contact(nextId, firstName, lastName, phoneNumbers));
@@ -37,36 +37,36 @@ contract AddressBook is Ownable(msg.sender) {
         nextId++;
     }
 
-    // Function to delete a contact by its ID
+    // Funcao para excluir um contato pelo seu ID
     function deleteContact(uint id) external onlyOwner {
-        // Get the index of the contact to be deleted
+        // Obtenha o index do contato a ser excluido
         uint index = idToIndex[id];
-        // Check if the index is valid and if the contact with the provided ID exists
+        // Verifique se o index esta valido e se existe o contato com o ID fornecido
         if (index >= contacts.length || contacts[index].id != id) revert ContactNotFound(id);
 
-        // Replace the contact to be deleted with the last contact in the array
+        // Substitua o contato a ser excluido pelo ultimo contato da array
         contacts[index] = contacts[contacts.length - 1];
-        // Update the index mapping for the moved contact
+        // Atualizar o mapeamento do index do contato movido
         idToIndex[contacts[index].id] = index;
-        // Remove the last contact from the array
+        // Remova o ultimo contato do array
         contacts.pop();
-        // Delete the mapping entry for the deleted contact ID
+        // Exclua a entrada de mapeamento do ID de contato excluido
         delete idToIndex[id];
     }
 
-    // Function to retrieve a contact by its ID
+    // Funcao para recuperar um contato pelo seu ID
     function getContact(uint id) external view returns (Contact memory) {
-        // Get the index of the contact
+        // pegue o index do contato
         uint index = idToIndex[id];
-        // Check if the index is valid and if the contact with the provided ID exists
+        // Verifique se o indice esta valido e se existe o contato com o ID fornecido
         if (index >= contacts.length || contacts[index].id != id) revert ContactNotFound(id);
-        // Return the contact details
+        // Retorna os detalhes do contato
         return contacts[index];
     }
 
-    // Function to retrieve all contacts
+    // Funcao para recuperar todos os contatos
     function getAllContacts() external view returns (Contact[] memory) {
-        // Return the array of all contacts
+        // Devolver o array de todos os contatos
         return contacts;
     }
 }

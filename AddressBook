@@ -4,24 +4,24 @@ pragma solidity ^0.8.8;
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract AddressBook is Ownable(msg.sender) {
-    // Define a privado salt valor para uso interno
+    // Define privado salt valor para uso interno
     string private salt = "value"; 
 
     // Define a estrutura para representar o contato
     struct Contact {
-        uint id; // Unique identifier for the contact
+        uint id; // Unico identificador do contato
         string firstName; // Primeiro nome do contato
         string lastName; // Ultimo nome do contato
         uint[] phoneNumbers; // Array para gravar multiplos numeros de contatos
     }
 
-    // Array to store all contacts
+    // Array para gravar todos os contatos
     Contact[] private contacts;
 
     // Mapping para gravar index de cada contato na lista array usando ID
     mapping(uint => uint) private idToIndex;
 
-    // Variable to keep track of the ID for the next contact
+    // Variavel para acompanhar o ID do proximo contato
     uint private nextId = 1;
 
     // Customiza erro para quando o contato nao encontrado
@@ -29,11 +29,11 @@ contract AddressBook is Ownable(msg.sender) {
 
     // Funcao para adicionar novo contato
     function addContact(string calldata firstName, string calldata lastName, uint[] calldata phoneNumbers) external onlyOwner {
-        // Create a new contact with the provided details and add it to the contacts array
+        // Crie um novo contato com os detalhes fornecidos e adicione-o aos contatos array
         contacts.push(Contact(nextId, firstName, lastName, phoneNumbers));
-        // Map the ID of the new contact to its index in the array
+        // Mapeie o ID do novo contato para seu indice no array
         idToIndex[nextId] = contacts.length - 1;
-        // Increment the nextId for the next contact
+        // Incrementar o nextId para o próximo contato
         nextId++;
     }
 

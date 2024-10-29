@@ -2,7 +2,7 @@
 Base Developer
 
 Website:
-https://docs.base.org/base-camp/docs/welcome
+https://docs.base.org/base-learn/docs/welcome/?utm_source=dotorg&utm_medium=nav
 
 Ferramentas:
 
